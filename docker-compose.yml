@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: job-automation-postgres
+    environment:
+      POSTGRES_DB: jobautomation
+      POSTGRES_USER: jobautomation
+      POSTGRES_PASSWORD: jobautomation
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: job-automation-mcp
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/jobautomation
+      DB_USERNAME: jobautomation
+      DB_PASSWORD: jobautomation
+      JOBS_SCHEDULER_CRON: "0 0 9,17 * * *"
+      JOBS_TARGET_COUNTRIES: EU,UAE
+      JOBS_TARGET_LOCATIONS: Amsterdam,Berlin,Paris,Barcelona,Milan,Stockholm,Zurich,London,Dublin,Oslo,Brussels,Helsinki,Prague,Vienna,Warsaw
+      JOBS_LIMIT_PER_PROVIDER: 10
+      JOBS_MAX_API_CALLS: 20
+      GITHUB_JOBS_ENABLED: true
+      APPLICANT_NAME: Kaustav Datta
+      APPLICANT_EMAIL: k.datta191994@gmail.com
+      APPLICANT_PHONE: +917980613041
+      APPLICANT_RESUME_EU: /app/resumes/Kaustav_Datta_Resume_2026.pdf
+      APPLICANT_RESUME_UAE: /app/resumes/Kaustav_Datta_FullStack_2026.pdf
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

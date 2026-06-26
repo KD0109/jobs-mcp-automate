@@ -1,0 +1,45 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/jobautomation}
+    username: ${DB_USERNAME:jobautomation}
+    password: ${DB_PASSWORD:jobautomation}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+jobs:
+  scheduler:
+    cron: ${JOBS_SCHEDULER_CRON:0 0 9,17 * * *}
+    countries: ${JOBS_TARGET_COUNTRIES:EU,UAE}
+    locations: ${JOBS_TARGET_LOCATIONS:Amsterdam,Berlin,Paris,Barcelona,Milan,Stockholm,Zurich,London,Dublin,Oslo,Brussels,Helsinki,Prague,Vienna,Warsaw}
+    limit-per-provider: ${JOBS_LIMIT_PER_PROVIDER:10}
+    max-api-calls: ${JOBS_MAX_API_CALLS:20}
+
+applicant:
+  name: ${APPLICANT_NAME:Kaustav Datta}
+  email: ${APPLICANT_EMAIL:k.datta191994@gmail.com}
+  phone: ${APPLICANT_PHONE:+917980613041}
+  resume-eu: ${APPLICANT_RESUME_EU:C:/Users/kaustav.a.datta/Downloads/Kaustav_Datta_Resume_2026.pdf}
+  resume-uae: ${APPLICANT_RESUME_UAE:C:/Users/kaustav.a.datta/Downloads/Kaustav_Datta_FullStack_2026.pdf}
+
+providers:
+  github:
+    enabled: ${GITHUB_JOBS_ENABLED:true}
+  adzuna:
+    enabled: ${ADZUNA_ENABLED:false}
+    app-id: ${ADZUNA_APP_ID:}
+    app-key: ${ADZUNA_APP_KEY:}
+  jooble:
+    enabled: ${JOOBLE_ENABLED:false}
+    api-key: ${JOOBLE_API_KEY:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
